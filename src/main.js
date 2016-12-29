@@ -1,7 +1,12 @@
-import * as enc from './encrypt.js';
+import {generateKeys, encrypt, decrypt} from './encrypt.js';
 import {gcd} from './gcd.js';
 
-const keys = enc.generateKeys();
-const message = "My message yo!";
+const keys = generateKeys();
+console.log(keys);
+
+const message = "A message yo!";
 
 console.log(message);
+const encryptedMessage = encrypt(keys.publicKey, message);
+console.log(encryptedMessage);
+console.log(decrypt(keys.privateKey, encryptedMessage));

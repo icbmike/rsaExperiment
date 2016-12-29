@@ -1,6 +1,8 @@
-import  gcd from './gcd.js'
+import  {eed} from './gcd.js';
+import _ from 'lodash';
+import bigInt from 'big-integer';
 
-function totient(q, p){
+function totient(p, q){
     return (p - 1) * (q - 1);
 }
 
@@ -9,19 +11,36 @@ function findCoprime(n){
 }
 
 export function generateKeys(){
-    const p = 5, q = 11;
+    const p = 61, q = 53;
 
     const n = p * q;
 
     const t = totient(p, q);
 
-    const e = findCoprime(t);
+    const e = 17
+
+    const d =  eed(e, t);
+
+    return {
+        publicKey: {
+            n, e
+        },
+        privateKey: {
+            d, n
+        }
+    }
 }
 
-export function encrypt(){
-
+export function encrypt(publicKey, message){
+    return _.map(message, charString => {
+        const charcode = charString.charCodeAt(0);
+        return bigInt(charcode).pow(publicKey.e).mod(publicKey.n);
+    }).join('+');
 }
 
-export function decrypt(){
-    
+export function decrypt(privateKey, encryptedMessage){
+     return _.map(encryptedMessage.split('+'), charString => {
+        const charcode = bigInt(charString).pow(privateKey.d).mod(privateKey.n).toJSNumber();
+        return String.fromCharCode(charcode);
+    }).join('');
 }
