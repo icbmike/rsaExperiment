@@ -16,8 +16,6 @@ export function generateKeys(){
     const t = totient(p, q);
 
     const e = findCoprime(t);
-
-    const d = find
 }
 
 export function encrypt(){
